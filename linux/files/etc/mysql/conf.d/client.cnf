@@ -1,0 +1,3 @@
+[client]
+# Force TCP protocol instead of unix socket: https://serverfault.com/a/337928
+protocol=tcp
