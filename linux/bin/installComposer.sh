@@ -1,5 +1,9 @@
 #!/bin/bash
 
+BIN_DIRECTORY="${HOME}/.clubdrei/bin"
+
+cd "${BIN_DIRECTORY}" || exit 1
+
 EXPECTED_CHECKSUM="$(wget -q -O - https://composer.github.io/installer.sig)"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
@@ -10,11 +14,16 @@ if [[ "${EXPECTED_CHECKSUM}" != "${ACTUAL_CHECKSUM}" ]]; then
   exit 1
 fi
 
-php composer-setup.php --install-dir="${HOME}/.local/bin" --quiet
+if [[ ! -d "${BIN_DIRECTORY}" ]]; then
+  mkdir -p "${BIN_DIRECTORY}"
+fi
+
+php composer-setup.php --install-dir="${BIN_DIRECTORY}" --quiet
 RESULT=$?
-mv "${HOME}/.local/bin/composer.phar" "${HOME}/.local/bin/composer"
+mv "${BIN_DIRECTORY}/composer.phar" "${BIN_DIRECTORY}/composer"
+chmod +x "${BIN_DIRECTORY}/composer"
 rm composer-setup.php
 exit ${RESULT}
 
 # Downgrade to composer V1 for now. Some TYPO3 projects are not compatible with V2 yet.
-"${HOME}/.local/bin/composer" self-update --1
+"${BIN_DIRECTORY}/composer" self-update --1
