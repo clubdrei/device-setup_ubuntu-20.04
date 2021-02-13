@@ -2,6 +2,11 @@
 
 BIN_DIRECTORY="${HOME}/.clubdrei/bin"
 
+if [ "$EUID" -eq 0 ]; then
+  echo "Abort - Do not run this script as root!"
+  exit 1
+fi
+
 cd "${BIN_DIRECTORY}" || exit 1
 
 EXPECTED_CHECKSUM="$(wget -q -O - https://composer.github.io/installer.sig)"
