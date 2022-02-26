@@ -5,8 +5,8 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 3306:3306
-      - 10306:3306
+      - 127.0.0.1:3306:3306
+      - 127.0.0.1:10306:3306
     volumes:
       - mysql_56:/var/lib/mysql
     environment:
@@ -17,7 +17,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 10307:3306
+      - 127.0.0.1:10307:3306
     volumes:
       - mysql_57:/var/lib/mysql
     environment:
@@ -28,9 +28,20 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 10308:3306
+      - 127.0.0.1:10308:3306
     volumes:
       - mysql_80:/var/lib/mysql
+    environment:
+      # Set in /etc/environment
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+  mariadb_103:
+    image: mariadb:10.3
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 127.0.0.1:10103:3306
+    volumes:
+      - mariadb_103:/var/lib/mysql
     environment:
       # Set in /etc/environment
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
@@ -38,3 +49,4 @@ volumes:
   mysql_56:
   mysql_57:
   mysql_80:
+  mariadb_103:
